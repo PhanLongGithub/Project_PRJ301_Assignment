@@ -73,3 +73,4 @@ create table Attendance(
   Foreign key (StudentsID) references Students(StudentsID),
   Foreign key (SessionID) references Session(SessionID)
 )
+
