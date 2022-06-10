@@ -32,7 +32,18 @@ create table Courses(
   Foreign key (DepartmentID) references Departments(DepartmentID)
 ) 
 
-create table Slot(
+create table Groups(
+  GroupID varchar(20) primary key
+)
+
+create table StudentGroup(
+  GroupID varchar(20) not null,
+  StudentsID varchar(20) not null,
+  Foreign key (GroupID) references Groups(GroupID),
+  Foreign key (StudentsID) references Students(StudentsID)
+)
+
+create table TimeSlot(
   SlotID varchar(20) primary key,
   SlotNumber varchar(20) not null,
   TimeFrom datetime not null,
@@ -40,22 +51,25 @@ create table Slot(
   Term varchar(20) not null
 )
 
-create table SlotDetail(
-  SlotID varchar(20) not null,
+create table [Session](
+  SessionID varchar(20) primary key,
+  GroupID varchar(20) not null,
   LecturersID varchar(20) not null,
-  Class varchar(20) not null,
   CourseID varchar(20) not null,
-  [Location] varchar(20) not null,
+  SlotID varchar(20) not null,
+  Room varchar(20) not null,
   SlotStatus varchar(20) not null check(SlotStatus='Attended' or SlotStatus='Not yet')
-  Foreign key (SlotID) references Slot(SlotID),
   Foreign key (LecturersID) references Lecturers(LecturersID),
-  Foreign key (CourseID) references Courses(CourseID)
+  Foreign key (CourseID) references Courses(CourseID),
+  Foreign key (SlotID) references TimeSlot(SlotID),
+  Foreign key (GroupID) references Groups(GroupID)
 )
 
 create table Attendance(
   StudentsID varchar(20) not null,
-  SlotID varchar(20) not null,
-  [Status] varchar(20) not null check(Status='Present' or Status='Absent')
+  SessionID varchar(20) not null,
+  [Status] varchar(20) not null check(Status='Present' or Status='Absent'),
+  RecordTime datetime not null
   Foreign key (StudentsID) references Students(StudentsID),
-  Foreign key (SlotID) references Slot(SlotID)
+  Foreign key (SessionID) references Session(SessionID)
 )
