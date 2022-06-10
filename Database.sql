@@ -6,14 +6,14 @@ use AttendanceTakingSystem
 
 create table Lecturers(
   LecturersID varchar(20) primary key,
-  LecturersName varchar(50) not null,
+  LecturersName nvarchar(50) not null,
   LecturersEmail varchar(100) not null,
   LecturersImage varchar(max) not null
 )
 
 create table Students(
   StudentsID varchar(20) primary key,
-  StudentsName varchar(50) not null,
+  StudentsName nvarchar(50) not null,
   StudentsEmail varchar(100) not null,
   StudentsImage varchar(max) not null
 )
