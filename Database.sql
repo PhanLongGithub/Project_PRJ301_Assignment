@@ -1,8 +1,15 @@
 use master
+go
 
 create database AttendanceTakingSystem
 
 use AttendanceTakingSystem
+go
+
+create table Campus(
+  CampusID varchar(20) primary key,
+  CampusName nvarchar(50) not null
+)
 
 create table Lecturers(
   LecturersID varchar(20) primary key,
@@ -10,7 +17,9 @@ create table Lecturers(
   LecturersMiddleName nvarchar(50),
   LecturersFirstName nvarchar(50),
   LecturersEmail varchar(100) not null,
-  LecturersImage varchar(max)
+  LecturersImage varchar(max),
+  CampusID varchar(20) not null,
+  Foreign key (CampusID) references Campus(CampusID)
 )
 
 create table Students(
@@ -19,14 +28,17 @@ create table Students(
   StudentsMiddleName nvarchar(50),
   StudentsFirstName nvarchar(50),
   StudentsEmail varchar(100) not null,
-  StudentsImage varchar(max)
+  StudentsImage varchar(max),
+  CampusID varchar(20) not null,
+  Foreign key (CampusID) references Campus(CampusID)
 )
 
 create table Departments(
   DepartmentID varchar(20) primary key,
   DepartmentName varchar(50) not null,
   Term varchar(20) not null,
-  Campus varchar(20) not null
+  CampusID varchar(20) not null,
+  Foreign key (CampusID) references Campus(CampusID)
 )
 
 create table Courses(
@@ -72,6 +84,7 @@ create table [Session](
 create table Attendance(
   StudentsID varchar(20) not null,
   SessionID varchar(20) not null,
+  Commet nvarchar(max) not null,
   [Status] varchar(20) not null check(Status='Present' or Status='Absent'),
   RecordTime datetime not null
   Foreign key (StudentsID) references Students(StudentsID),
