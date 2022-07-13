@@ -22,7 +22,7 @@ public abstract class DBContext<T> {
     public DBContext() {
         try {
             String user = "long";
-            String pass = "005664";
+            String pass = "5664";
             String url = "jdbc:sqlserver://DESKTOP-ODJFPGI\\LONG\\DESKTOP-ODJFPGI\\LONG:1433;databaseName=AttendanceTakingSystem";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);

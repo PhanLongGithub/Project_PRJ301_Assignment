@@ -7,7 +7,7 @@ use AttendanceTakingSystem
 go
 
 create table Campus(
-  CampusID varchar(20) primary key,
+  CampusID int IDENTITY(1,1) primary key,
   CampusName nvarchar(50) not null
 )
 
@@ -18,7 +18,7 @@ create table Lecturers(
   LecturersFirstName nvarchar(50),
   LecturersEmail varchar(100) not null,
   LecturersImage varchar(max),
-  CampusID varchar(20) not null,
+  CampusID int not null,
   Foreign key (CampusID) references Campus(CampusID)
 )
 
@@ -29,22 +29,22 @@ create table Students(
   StudentsFirstName nvarchar(50),
   StudentsEmail varchar(100) not null,
   StudentsImage varchar(max),
-  CampusID varchar(20) not null,
+  CampusID int not null,
   Foreign key (CampusID) references Campus(CampusID)
 )
 
 create table Departments(
-  DepartmentID varchar(20) primary key,
+  DepartmentID int IDENTITY(1,1) primary key,
   DepartmentName varchar(50) not null,
   Term varchar(20) not null,
-  CampusID varchar(20) not null,
+  CampusID int not null,
   Foreign key (CampusID) references Campus(CampusID)
 )
 
 create table Courses(
   CourseID varchar(20) primary key,
   CourseName varchar(50) not null,
-  DepartmentID varchar(20) not null,
+  DepartmentID int not null,
   Foreign key (DepartmentID) references Departments(DepartmentID)
 ) 
 
@@ -60,7 +60,7 @@ create table StudentGroup(
 )
 
 create table TimeSlot(
-  SlotID varchar(20) primary key,
+  SlotID int IDENTITY(1,1) primary key,
   SlotNumber varchar(20) not null,
   TimeFrom datetime not null,
   TimeTo datetime not null,
@@ -68,11 +68,11 @@ create table TimeSlot(
 )
 
 create table [Session](
-  SessionID varchar(20) primary key,
+  SessionID int IDENTITY(1,1) primary key,
   GroupID varchar(20) not null,
   LecturersID varchar(20) not null,
   CourseID varchar(20) not null,
-  SlotID varchar(20) not null,
+  SlotID int not null,
   Room varchar(20) not null,
   SlotStatus varchar(20) not null check(SlotStatus='Attended' or SlotStatus='Not yet')
   Foreign key (LecturersID) references Lecturers(LecturersID),
@@ -83,7 +83,7 @@ create table [Session](
 
 create table Attendance(
   StudentsID varchar(20) not null,
-  SessionID varchar(20) not null,
+  SessionID int not null,
   Commet nvarchar(max) not null,
   [Status] varchar(20) not null check(Status='Present' or Status='Absent'),
   RecordTime datetime not null
