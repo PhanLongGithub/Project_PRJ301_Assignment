@@ -17,7 +17,7 @@ SELECT [SessionID]
  FROM [dbo].[Session] s
  LEFT JOIN [dbo].[TimeSlot] t on t.[SlotID] = s.[SlotID]
  LEFT JOIN [dbo].Lecturers l on l.LecturersID = s.LecturersID
- WHERE t.TimeFrom >= '2022-06-20' and t.TimeFrom <= '2022-06-26' and s.[LecturersID] like 'longpk01' and l.CampusID like '1'
+ WHERE t.TimeFrom >= '2022-06-20' and t.TimeFrom <= '2022-06-26' and s.[LecturersID] like 'longpt01' and l.CampusID like '1'
 
  --Attendance
  SELECT [SessionID]

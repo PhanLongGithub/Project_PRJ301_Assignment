@@ -11,7 +11,7 @@ public class TimeSlot {
     private int SlotID;
     private int SlotNumber;
     private Date TimeFrom;
-    private Date TiemTo;
+    private Date TimeTo;
     private String Term;
 
     public TimeSlot() {
@@ -41,12 +41,12 @@ public class TimeSlot {
         this.TimeFrom = TimeFrom;
     }
 
-    public Date getTiemTo() {
-        return TiemTo;
+    public Date getTimeTo() {
+        return TimeTo;
     }
 
-    public void setTiemTo(Date TiemTo) {
-        this.TiemTo = TiemTo;
+    public void setTimeTo(Date TiemTo) {
+        this.TimeTo = TiemTo;
     }
 
     public String getTerm() {

@@ -15,6 +15,12 @@ import Model.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import Database.CampusDBContext;
+import Database.LecturersDBContext;
+import Database.TimeslotDBContext;
+import java.text.SimpleDateFormat;
+import java.time.Year;
+import java.time.ZoneId;
+import java.util.Calendar;
 
 /**
  *
@@ -33,17 +39,73 @@ public class LecturerSchedule extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        Date TimeFrom = Date.valueOf(request.getParameter("timeFrom"));
-//        Date TimeTo = Date.valueOf(request.getParameter("timeto"));
-//        String LecturersID = request.getParameter("LecturersID");
-//        int CampusID = Integer.parseInt(request.getParameter("CampusID"));
-//        SessionsDBContext sdb = new SessionsDBContext();
-//        ArrayList<Session> session = sdb.searchByLecturers(TimeFrom, TimeTo, LecturersID, CampusID);
-//        request.setAttribute("session", session);
+        String TimeFrom = request.getParameter("from");
+        String TimeTo = request.getParameter("to");
+        Date from = (TimeFrom != null && TimeFrom.length() > 0) ? Date.valueOf(TimeFrom) : null;
+        Date to = (TimeTo != null && TimeTo.length() > 0) ? Date.valueOf(TimeTo) : null;
 
         CampusDBContext cdb = new CampusDBContext();
         ArrayList<Campus> campus = cdb.list();
         request.setAttribute("campus", campus);
+
+        LecturersDBContext ldb = new LecturersDBContext();
+        ArrayList<Lecturers> lec = ldb.list();
+        request.setAttribute("lecturers", lec);
+
+        TimeslotDBContext tsdb = new TimeslotDBContext();
+        ArrayList<TimeSlot> timeslot = tsdb.list();
+        request.setAttribute("timeslot", timeslot);
+
+        Calendar calFrom = Calendar.getInstance();
+        Calendar calTo = Calendar.getInstance();
+        calFrom.setTime(from);
+        calTo.setTime(to);
+        ArrayList TimeList = new ArrayList<>();
+        while (true) {
+            String date = calFrom.getTime().toString();
+            TimeList.add(date);
+            if (calFrom.compareTo(calTo) > 0) {
+                break;
+            }
+            calFrom.add(Calendar.DATE, 1);
+        }
+        request.setAttribute("date", TimeList);
+
+//        Calendar cal = Calendar.getInstance();
+//        cal.clear();
+//        cal.set(Calendar.YEAR, 2022);
+//        cal.set(Calendar.MONTH, Calendar.JANUARY);
+//        cal.set(Calendar.DATE,1);
+//        System.out.println("Start at " + cal.getTime());
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy");
+//        ArrayList Year = new ArrayList();
+//        for (TimeSlot slot : timeslot) {
+//            String year = format.format(slot.getTimeFrom());
+//            if (!Year.contains(year)) {
+//                Year.add(year);
+//            }
+//        }
+//        request.setAttribute("year", Year);
+//
+//        SimpleDateFormat formatWeek = new SimpleDateFormat("dd/MM");
+//        formatWeek.setLenient(false);
+//        
+//        
+//        ArrayList Week = new ArrayList();
+//        for (TimeSlot slot : timeslot) {
+//            String weekFrom = formatWeek.format(slot.getTimeFrom());
+//            String weekTo = formatWeek.format(slot.getTimeTo());
+//            String week = weekFrom + " to " + weekTo;
+//            if (!Week.contains(week)) {
+//                Week.add(week);
+//            }
+//        }
+//        request.setAttribute("week", Week);
+        String LecturersID = request.getParameter("lecturer");
+        int CampusID = Integer.parseInt(request.getParameter("campus"));
+        SessionsDBContext sdb = new SessionsDBContext();
+        ArrayList<Session> session = sdb.DisplaySchedule(LecturersID, CampusID, from, to);
+        request.setAttribute("session", session);
         request.getRequestDispatcher("../View/LecturerSchedule.jsp").forward(request, response);
     }
 
@@ -59,7 +121,18 @@ public class LecturerSchedule extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        CampusDBContext cdb = new CampusDBContext();
+        ArrayList<Campus> campus = cdb.list();
+        request.setAttribute("campus", campus);
+
+        LecturersDBContext ldb = new LecturersDBContext();
+        ArrayList<Lecturers> lec = ldb.list();
+        request.setAttribute("lecturers", lec);
+
+        TimeslotDBContext tsdb = new TimeslotDBContext();
+        ArrayList<TimeSlot> timeslot = tsdb.list();
+        request.setAttribute("timeslot", timeslot);
+        request.getRequestDispatcher("../View/LecturerSchedule.jsp").forward(request, response);
     }
 
     /**
