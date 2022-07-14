@@ -56,14 +56,33 @@ public class LecturerSchedule extends HttpServlet {
         ArrayList<TimeSlot> timeslot = tsdb.list();
         request.setAttribute("timeslot", timeslot);
 
+        ArrayList slot = new ArrayList();
+        slot.add(1);
+        slot.add(2);
+        slot.add(3);
+        slot.add(4);
+        slot.add(5);
+        slot.add(6);
+        slot.add(7);
+        slot.add(8);
+        request.setAttribute("slot", slot);
+
+        SimpleDateFormat formatDayofWeek = new SimpleDateFormat("E");
+        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM");
         Calendar calFrom = Calendar.getInstance();
         Calendar calTo = Calendar.getInstance();
         calFrom.setTime(from);
         calTo.setTime(to);
-        ArrayList TimeList = new ArrayList<>();
+        ArrayList<Time> TimeList = new ArrayList<>();
         while (true) {
-            String date = calFrom.getTime().toString();
-            TimeList.add(date);
+            Time time = new Time();
+            Date timeDate = new Date(calFrom.getTimeInMillis());
+            String date = formatDate.format(calFrom.getTime());
+            String dayOfWeek = formatDayofWeek.format(calFrom.getTime());
+            time.setDate(timeDate);
+            time.setDayAndMonth(date);
+            time.setDayOfWeek(dayOfWeek);
+            TimeList.add(time);
             if (calFrom.compareTo(calTo) > 0) {
                 break;
             }

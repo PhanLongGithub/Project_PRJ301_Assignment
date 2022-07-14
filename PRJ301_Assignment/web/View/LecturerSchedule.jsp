@@ -44,7 +44,7 @@
             <label for="to">To:</label>
             <input type="date" value="to" name="to" id="to">
             <br>
-            <input type="submit" value="SEARCH">
+            <input type="submit" value="SEARCH" onclick="checkDate()">
         </form>
         <c:if test="${requestScope.session ne null}">
             <table>
@@ -52,23 +52,28 @@
                     <tr>
                         <th id="slot">Slot</th>
                             <c:forEach items="${requestScope.date}" var="date">
-                            <th>${date}</th>
+                            <th>
+                                ${date.dayOfWeek} <br>
+                                ${date.dayAndMonth}
+                            </th>
                         </c:forEach>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="${requestScope.timeslot}" var="slot">
+                    <c:forEach items="${requestScope.slot}" var="slot">
                         <tr>
-                            <td headers="slot">${slot.slotNumber}</td>
-                            <c:forEach items= "${requestScope.session}" var="se">
-                                <c:if test="${se.slot.slotNumber eq slot.slotNumber}">
-                                    <td>
-                                        ${se.groups.groupID}<br>
-                                        ${se.courses.courseID}<br>
-                                        AT ${se.room}<br>
-                                        ${se.sessionStatus}<br>
-                                    </td>
-                                </c:if>
+                            <td headers="slot">${slot}</td>
+                            <c:forEach items="${requestScope.date}" var="date">
+                                <td>
+                                    <c:forEach items= "${requestScope.session}" var="se">
+                                        <c:if test="${se.slot.slotNumber eq slot and date.date eq se.slot.timeFrom}">
+                                            ${se.groups.groupID}<br>
+                                            ${se.courses.courseID}<br>
+                                            AT ${se.room}<br>
+                                            ${se.sessionStatus}<br>
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
                             </c:forEach>
                         </tr>
                     </c:forEach> 
