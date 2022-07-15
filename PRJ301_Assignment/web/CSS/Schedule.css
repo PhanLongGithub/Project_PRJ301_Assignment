@@ -1,8 +1,13 @@
+@font-face {
+    font-family: myFirstFont;
+    src: url(../Font/Bitter/static/Bitter-Bold.ttf);
+}
+
 body{
     margin: 0px;
 }
 header img{
-    margin: 20px 10px 
+    margin: 20px 10px
 }
 header{
     background-color: #fff;
@@ -11,12 +16,85 @@ section{
     background-color: #fbb650;
 }
 .form1{
-    padding-top: 20px;
-   margin-left: 50px;
+    padding-top: 15px;
+    margin-left: 50px;
+    font-family: myFirstFont;
 }
 label{
     margin: 10px;
 }
 .Campus{
-    
+    font-family: myFirstFont;
+    padding: 5px 0px;
+}
+.Lecturer{
+    padding: 5px 0px;
+}
+.from{
+    padding: 5px 0px;
+}
+.to{
+    padding: 5px 0px;
+}
+.Campus select{
+    border: 3px solid #493030;
+}
+.Lecturer select{
+    border: 3px solid #493030;
+}
+.from input{
+    border: 3px solid #493030;
+    margin-left: 22px;
+}
+.to input{
+    border: 3px solid #493030;
+    margin-left: 44px;
+}
+.submit{
+    border: 3px solid #000;
+    background-color: #000;
+    color: #fff;
+    font-family: myFirstFont;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+table{
+    margin-top: 20px;
+    margin-left: 10px;
+    border-spacing: 0px;
+    padding-bottom: 20px;
+}
+table thead{
+    background-color: #fff;
+    border-spacing: 0px;
+}
+table thead th{
+    padding: 0px 20px;
+    font-family: myFirstFont;
+    color: #000;
+    border-bottom: 10px solid #fbb650;
+}
+table thead .Slot{
+    padding: 0px 20px;
+    font-family: myFirstFont;
+    color: #000;
+    border-bottom: 10px solid #fbb650;
+    border-right: 10px solid #fbb650;
+}
+table tbody{
+    border-spacing: 5px;
+    background-color: #fff;
+}
+table tbody tr td{
+    padding: 10px 20px;
+    font-family: myFirstFont;
+    color: #000;
+    border: 2px solid #fbb650;
+}
+table tbody tr .slot{
+    padding: 10px 20px;
+    font-family: myFirstFont;
+    color: #000;
+    border: 0px solid #fbb650;
+    border-right: 10px solid #fbb650;
 }

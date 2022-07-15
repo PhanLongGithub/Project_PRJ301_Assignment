@@ -15,7 +15,7 @@
     </head>
     <body>
         <header>
-            <img src="../Image/FPT Logo.png" width="300px">
+            <img src="../Image/FPT Logo.png" width="270px">
         </header>
         <section>
             <form action="../lecturer/schedule" method="POST" class="form1">
@@ -33,7 +33,7 @@
                     </select>
                 </div>
                 <!--            Lecturer-->
-                <div>
+                <div class="Lecturer">
                     <label for="lecturer">Lecturer: </label>
                     <select name="lecturer" id="lecturer">
                         <c:forEach items="${requestScope.lecturers}" var="l">
@@ -45,19 +45,21 @@
                         </c:forEach>
                     </select>
                 </div>
-                <label for="from">From: </label>
-                <input type="date" value="from" name="from" id="from">
-                <br>
-                <label for="to">To:</label>
-                <input type="date" value="to" name="to" id="to">
-                <br>
-                <input type="submit" value="VIEW">
+                <div class="from">     
+                    <label for="from">From: </label>
+                    <input type="date" value="from" name="from" id="from">
+                </div>
+                <div class="to">
+                    <label for="to">To:</label>
+                    <input type="date" value="to" name="to" id="to">
+                </div>
+                <input type="submit" value="VIEW" class="submit">
             </form>
             <c:if test="${requestScope.session ne null}">
                 <table>
                     <thead>
                         <tr>
-                            <th id="slot">Slot</th>
+                            <th id="slot" class="Slot">Slot</th>
                                 <c:forEach items="${requestScope.date}" var="date">
                                 <th>
                                     ${date.dayOfWeek} <br>
@@ -69,7 +71,7 @@
                     <tbody>
                         <c:forEach items="${requestScope.slot}" var="slot">
                             <tr>
-                                <td headers="slot">${slot}</td>
+                                <td class="slot">${slot}</td>
                                 <c:forEach items="${requestScope.date}" var="date">
                                     <td>
                                         <c:forEach items= "${requestScope.session}" var="se">
