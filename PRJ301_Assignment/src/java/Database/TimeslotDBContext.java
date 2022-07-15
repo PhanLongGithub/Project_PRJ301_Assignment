@@ -37,13 +37,39 @@ public class TimeslotDBContext extends DBContext {
                 slot.setTimeTo(rs.getDate("TimeFrom"));
                 slot.setTimeFrom(rs.getDate("TimeTo"));
                 slot.setTerm(rs.getString("Term"));
-                
+
                 timeslot.add(slot);
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return timeslot;
+    }
+
+    public TimeSlot getTimeByID(int id) {
+        TimeSlot slot = new TimeSlot();
+        try {
+            String sql = "SELECT [SlotID]\n"
+                    + "      ,[SlotNumber]\n"
+                    + "      ,[TimeFrom]\n"
+                    + "      ,[TimeTo]\n"
+                    + "      ,[Term]\n"
+                    + "  FROM [dbo].[TimeSlot]\n"
+                    + "  Where TimeSlot.SlotID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                slot.setSlotID(rs.getInt("SlotID"));
+                slot.setSlotNumber(rs.getInt("SlotNumber"));
+                slot.setTimeFrom(rs.getDate("TimeFrom"));
+                slot.setTimeTo(rs.getDate("TimeTo"));
+                slot.setTerm(rs.getString("Term"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return slot;
     }
 
     @Override

@@ -125,6 +125,65 @@ public class SessionsDBContext extends DBContext {
         return sessions2;
     }
 
+    public ArrayList<Session> GetAtendance(int SessionID) {
+        ArrayList<Session> sessions = new ArrayList<>();
+        try {
+            String sql = " SELECT se.GroupID,\n"
+                    + "     st.StudentsID,\n"
+                    + "	 st.StudentsFirstName,\n"
+                    + "	 st.StudentsMiddleName,\n"
+                    + "	 st.StudentsLastName,\n"
+                    + "	 se.LecturersID,\n"
+                    + "	 se.CourseID,\n"
+                    + "	 se.SlotID,\n"
+                    + "	 se.Room,\n"
+                    + "	 se.SlotStatus\n"
+                    + " FROM [dbo].StudentGroup sg\n"
+                    + " JOIN [dbo].[Session] se \n"
+                    + " on sg.GroupID = se.GroupID\n"
+                    + " JOIN [dbo].Students st\n"
+                    + " on sg.StudentsID = st.StudentsID\n"
+                    + " Where se.SessionID like ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, SessionID);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Session se = new Session();
+
+                Students st = new Students();
+                st.setStudentsID(rs.getString("StudentsID"));
+                st.setStudentsFirstName(rs.getString("StudentsFirstName"));
+                st.setStudentsMiddleName(rs.getString("StudentsMiddleName"));
+                st.setStudentsLastName(rs.getString("StudentsLastName"));
+
+                StudentGroups sg = new StudentGroups();
+                sg.setStudent(st);
+                sg.setGroupID(rs.getString("GroupID"));
+                se.setGroups(sg);
+
+                Lecturers lec = new Lecturers();
+                lec.setLecturersID(rs.getString("LecturersID"));
+                se.setLecturers(lec);
+
+                Courses courses = new Courses();
+                courses.setCourseID(rs.getString("CourseID"));
+                se.setCourses(courses);
+
+                TimeSlot slot = new TimeSlot();
+                slot.setSlotID(rs.getInt("SlotID"));
+                se.setSlot(slot);
+
+                se.setRoom(rs.getString("Room"));
+                se.setSessionStatus(rs.getString("SlotStatus"));
+
+                sessions.add(se);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionsDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sessions;
+    }
+
     @Override
     public ArrayList list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

@@ -33,7 +33,7 @@ SELECT [SessionID]
  FROM [dbo].[Session] s
  LEFT JOIN [dbo].[TimeSlot] t on t.[SlotID] = s.[SlotID]
  LEFT JOIN [dbo].Lecturers l on l.LecturersID = s.LecturersID
- WHERE t.TimeFrom >= '2022-06-24' and t.TimeFrom <= '2022-06-24' and s.[LecturersID] like 'longpk01' and l.CampusID like '1'
+ WHERE t.TimeFrom >= '2022-06-20' and t.TimeFrom <= '2022-06-26' and s.[LecturersID] like 'longpt01' and l.CampusID like '1'
  and GroupID like 'SE1630'
 
  INSERT INTO [dbo].[Attendance]
@@ -63,4 +63,21 @@ SELECT se.GroupID,
  on a.SessionID = se.SessionID
  JOIN [dbo].Students st
  on a.StudentsID = st.StudentsID
- Where se.GroupID like 'SE1630' and se.LecturersID like 'longpk01' and a.RecordTime >= '2022-06-24' and a.RecordTime <= '2022-06-24'
+ Where se.SessionID like '1'
+
+ SELECT se.GroupID,
+     st.StudentsID,
+	 st.StudentsFirstName,
+	 st.StudentsMiddleName,
+	 st.StudentsLastName,
+	 se.LecturersID,
+	 se.CourseID,
+	 se.SlotID,
+	 se.Room,
+	 se.SlotStatus
+ FROM [dbo].StudentGroup sg
+ JOIN [dbo].[Session] se 
+ on sg.GroupID = se.GroupID
+ JOIN [dbo].Students st
+ on sg.StudentsID = st.StudentsID
+ Where se.SessionID like '1'

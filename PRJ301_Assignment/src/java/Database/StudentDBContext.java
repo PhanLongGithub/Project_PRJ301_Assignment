@@ -41,7 +41,7 @@ public class StudentDBContext extends DBContext {
                 s.setStudentsMiddleName(rs.getString("StudentsMiddleName"));
                 s.setStudentsLastName(rs.getString("StudentsLastName"));
                 s.setStudentsEmail(rs.getString("StudentsEmail"));
-                
+
                 Campus c = new Campus();
                 c.setCampusID(rs.getInt("CampusID"));
                 s.setCampus(c);
@@ -51,6 +51,30 @@ public class StudentDBContext extends DBContext {
             Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return students;
+    }
+
+    public String getStudentNameByID(String id) {
+        String FullName = null;
+        try {
+            String sql = "SELECT[StudentsLastName]\n"
+                    + "      ,[StudentsMiddleName]\n"
+                    + "      ,[StudentsFirstName]\n"
+                    + "  FROM [dbo].[Students]\n"
+                    + "  WHERE Students.StudentsID like ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Students s = new Students();
+                s.setStudentsFirstName(rs.getString("StudentsFirstName"));
+                s.setStudentsMiddleName(rs.getString("StudentsMiddleName"));
+                s.setStudentsLastName(rs.getString("StudentsLastName"));
+                FullName = s.getStudentsLastName() + s.getStudentsMiddleName() + s.getStudentsFirstName();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return FullName;
     }
 
     @Override
