@@ -133,6 +133,7 @@ public class SessionsDBContext extends DBContext {
                     + "	 st.StudentsFirstName,\n"
                     + "	 st.StudentsMiddleName,\n"
                     + "	 st.StudentsLastName,\n"
+                    + "	 se.SessionID,\n"
                     + "	 se.LecturersID,\n"
                     + "	 se.CourseID,\n"
                     + "	 se.SlotID,\n"
@@ -175,6 +176,7 @@ public class SessionsDBContext extends DBContext {
 
                 se.setRoom(rs.getString("Room"));
                 se.setSessionStatus(rs.getString("SlotStatus"));
+                se.setSessionID(rs.getInt("SessionID"));
 
                 sessions.add(se);
             }

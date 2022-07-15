@@ -4,25 +4,25 @@
  */
 package Controller;
 
+import Database.AttendanceDBContext;
+import Model.Attendance;
+import Model.Session;
+import Model.Students;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import Database.SessionsDBContext;
-import Database.StudentDBContext;
-import Database.TimeslotDBContext;
-import Model.Session;
-import Model.TimeSlot;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
  * @author ADMIN
  */
-public class LecturerTakeAttendance extends HttpServlet {
+public class ShowAttendance extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,57 +35,29 @@ public class LecturerTakeAttendance extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String takeSessionID = request.getParameter("sessionID");
-        int SessionID = (takeSessionID != null && takeSessionID.length() > 0) ? new Integer(takeSessionID) : null;
-        SessionsDBContext sdb = new SessionsDBContext();
-        ArrayList<Session> list = sdb.GetAtendance(SessionID);
-        request.setAttribute("list", list);
+        String[] raw_index = request.getParameterValues("index");
+        for (String raw_index1 : raw_index) {
+            String studentID = request.getParameter(raw_index1 + "StudentID");
+            int sessionID = Integer.parseInt(request.getParameter(raw_index1 + "SessionID"));
+            String Comment = request.getParameter(raw_index1 + "comment");
+            String status = request.getParameter(raw_index1 + "status");
+            Calendar cal = Calendar.getInstance();
+            Date date = new Date(cal.getTimeInMillis());
+            Students st = new Students();
+            st.setStudentsID(studentID);
+            Session se = new Session();
+            se.setSessionID(sessionID);
+            Attendance at = new Attendance();
+            at.setStudents(st);
+            at.setSession(se);
+            at.setCommet(Comment);
+            at.setStatus(status);
+            at.setRecordTime(date);
 
-        String Group = null;
-        for (Session se : list) {
-            Group = se.getGroups().getGroupID();
+            AttendanceDBContext adb = new AttendanceDBContext();
+            adb.insert(at);
         }
-        request.setAttribute("group", Group);
-
-        String Lecturer = null;
-        for (Session se : list) {
-            Lecturer = se.getLecturers().getLecturersID();
-        }
-        request.setAttribute("lec", Lecturer);
-
-        int SlotNumber = 0;
-        Date date = null;
-        String term = null;
-        for (Session se : list) {
-            TimeslotDBContext tdb = new TimeslotDBContext();
-            TimeSlot time = tdb.getTimeByID(se.getSlot().getSlotID());
-            SlotNumber = time.getSlotNumber();
-            date = time.getTimeFrom();
-            term = time.getTerm();
-        }
-        request.setAttribute("slotNumber", SlotNumber);
-        request.setAttribute("date", date);
-        request.setAttribute("term", term);
-
-        String Room = null;
-        for (Session se : list) {
-            Room = se.getRoom();
-        }
-        request.setAttribute("room", Room);
-
-        String Course = null;
-        for (Session se : list) {
-            Course = se.getCourses().getCourseID();
-        }
-        request.setAttribute("course", Course);
-
-        String StudentName = null;
-        for (Session se : list) {
-            StudentDBContext stdb = new StudentDBContext();
-            StudentName = stdb.getStudentNameByID(se.getGroups().getStudent().getStudentsID());
-        }
-        request.setAttribute("StudentName", StudentName);
-        request.getRequestDispatcher("../View/LecturerTakeAttendance.jsp").forward(request, response);
+        request.getRequestDispatcher("View/ShowAttendance.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

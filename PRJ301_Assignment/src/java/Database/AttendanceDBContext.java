@@ -40,18 +40,44 @@ public class AttendanceDBContext extends DBContext {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Attendance at = new Attendance();
-                
+
                 Students st = new Students();
                 st.setStudentsFirstName(rs.getString(SessionID));
                 st.setStudentsMiddleName(sql);
                 st.setStudentsLastName(sql);
                 at.setStudents(st);
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(SessionsDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sessions;
+    }
+
+    public void insert(Attendance model) {
+        try {
+            String sql = " INSERT INTO [dbo].[Attendance]\n"
+                    + "           ([StudentsID]\n"
+                    + "           ,[SessionID]\n"
+                    + "           ,[Commet]\n"
+                    + "           ,[Status]\n"
+                    + "           ,[RecordTime])\n"
+                    + "     VALUES\n"
+                    + "           (?\n"
+                    + "           ,?\n"
+                    + "           ,?\n"
+                    + "           ,?\n"
+                    + "           ,?)";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, model.getStudents().getStudentsID());
+            stm.setInt(2, model.getSession().getSessionID());
+            stm.setString(3, model.getCommet());
+            stm.setString(4, model.getStatus());
+            stm.setDate(5, model.getRecordTime());
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

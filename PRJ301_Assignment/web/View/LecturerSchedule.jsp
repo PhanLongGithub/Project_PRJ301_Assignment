@@ -76,10 +76,10 @@
                                     <td>
                                         <c:forEach items= "${requestScope.session}" var="se">
                                             <c:if test="${se.slot.slotNumber eq slot and date.date eq se.slot.timeFrom}">
-                                                <form id="TakeAttendance" action="../Lecturer/TakeAttendance" method="POST">
+                                                <form id="TakeAttendance${se.sessionID}" action="../Lecturer/TakeAttendance" method="POST">
                                                     <input type="hidden" name="sessionStatus" value="${se.sessionStatus}">
                                                     <input type="hidden" name="sessionID" value="${se.sessionID}">
-                                                    <a href="#" onclick="document.getElementById('TakeAttendance').submit();">
+                                                    <a href="#" onclick="document.getElementById('TakeAttendance${se.sessionID}').submit();">
                                                         ${se.groups.groupID}
                                                     </a><br>
                                                     ${se.courses.courseID}<br>
