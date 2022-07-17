@@ -156,6 +156,33 @@ public class AttendanceDBContext extends DBContext {
         }
     }
 
+    public Attendance check(int SessionID) {
+        try {
+            String sql = "SELECT [StudentsID]\n"
+                    + "      ,[SessionID]\n"
+                    + "  FROM [dbo].[Attendance]\n"
+                    + "  where [SessionID] = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, SessionID);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Session se = new Session();
+                se.setSessionID(rs.getInt("SessionID"));
+
+                Students st = new Students();
+                st.setStudentsID(rs.getString("StudentsID"));
+
+                Attendance at = new Attendance();
+                at.setSession(se);
+                at.setStudents(st);
+                return at;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     @Override
     public ArrayList list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

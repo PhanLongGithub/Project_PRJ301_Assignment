@@ -13,6 +13,9 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <header>
+            <img src="../Image/FPT Logo.png" width="270px">
+        </header>
         <form action="../showattendance" method="POST">
             <p>SINGLE ACTIVITY ATTENDANCE</p>
             <p>Attendance for ${requestScope.course} with Lecturer ${requestScope.lec} at Slot ${requestScope.slotNumber} on ${requestScope.date}. ${requestScope.term} in room ${requestScope.room}</p>
