@@ -54,6 +54,82 @@ public class AttendanceDBContext extends DBContext {
         return sessions;
     }
 
+    public ArrayList<Attendance> searchBySession(int SessionID) {
+        ArrayList<Attendance> atlist = new ArrayList<>();
+        try {
+            String sql = " SELECT st.[StudentsID],\n"
+                    + "       st.StudentsFirstName,\n"
+                    + "	   st.StudentsMiddleName,\n"
+                    + "	   st.StudentsLastName,\n"
+                    + "	   ts.TimeFrom,\n"
+                    + "	   ts.Term,\n"
+                    + "	   ts.SlotNumber,\n"
+                    + "	   se.Room,\n"
+                    + "	   se.CourseID,\n"
+                    + "	   se.LecturersID,\n"
+                    + "	   sg.GroupID\n"
+                    + "      ,se.[SessionID]\n"
+                    + "      ,at.[Commet]\n"
+                    + "      ,at.[Status]\n"
+                    + "      ,at.[RecordTime]\n"
+                    + " FROM [dbo].StudentGroup sg\n"
+                    + " JOIN [dbo].[Session] se \n"
+                    + " on sg.GroupID = se.GroupID\n"
+                    + " JOIN [dbo].Students st\n"
+                    + " on sg.StudentsID = st.StudentsID\n"
+                    + " JOIN [dbo].Attendance at\n"
+                    + " on at.SessionID = se.SessionID and at.StudentsID = st.StudentsID\n"
+                    + " JOIN [dbo].TimeSlot ts\n"
+                    + " on ts.SlotID = se.SlotID\n"
+                    + " Where se.SessionID like ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, SessionID);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Attendance at = new Attendance();
+
+                Students st = new Students();
+                st.setStudentsID(rs.getString("StudentsID"));
+                st.setStudentsFirstName(rs.getString("StudentsFirstName"));
+                st.setStudentsMiddleName(rs.getString("StudentsMiddleName"));
+                st.setStudentsLastName(rs.getString("StudentsLastName"));
+
+                TimeSlot time = new TimeSlot();
+                time.setTimeFrom(rs.getDate("TimeFrom"));
+                time.setTerm(rs.getString("Term"));
+                time.setSlotNumber(rs.getInt("SlotNumber"));
+
+                Courses co = new Courses();
+                co.setCourseID(rs.getString("CourseID"));
+
+                StudentGroups sg = new StudentGroups();
+                sg.setGroupID(rs.getString("CourseID"));
+
+                Lecturers lec = new Lecturers();
+                lec.setLecturersID(rs.getString("LecturersID"));
+
+                Session se = new Session();
+                se.setSessionID(rs.getInt("SessionID"));
+                se.setCourses(co);
+                se.setGroups(sg);
+                se.setSlot(time);
+                se.setRoom(rs.getString("Room"));
+                se.setLecturers(lec);
+
+                at.setStudents(st);
+                at.setSession(se);
+                at.setCommet(rs.getString("Commet"));
+                at.setRecordTime(rs.getDate("RecordTime"));
+                at.setStatus(rs.getString("Status"));
+
+                atlist.add(at);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionsDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return atlist;
+    }
+
     public void insert(Attendance model) {
         try {
             String sql = " INSERT INTO [dbo].[Attendance]\n"

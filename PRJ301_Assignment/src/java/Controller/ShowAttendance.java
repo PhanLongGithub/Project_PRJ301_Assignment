@@ -36,16 +36,17 @@ public class ShowAttendance extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String[] raw_index = request.getParameterValues("index");
+        Session se = new Session();
+        AttendanceDBContext adb = new AttendanceDBContext();
         for (String raw_index1 : raw_index) {
             String studentID = request.getParameter(raw_index1 + "StudentID");
             int sessionID = Integer.parseInt(request.getParameter(raw_index1 + "SessionID"));
-            String Comment = request.getParameter(raw_index1 + "comment");
-            String status = request.getParameter(raw_index1 + "status");
+            String Comment = request.getParameter(raw_index1 + "comment").toUpperCase();
+            String status = request.getParameter(raw_index1 + "status").toUpperCase();
             Calendar cal = Calendar.getInstance();
             Date date = new Date(cal.getTimeInMillis());
             Students st = new Students();
             st.setStudentsID(studentID);
-            Session se = new Session();
             se.setSessionID(sessionID);
             Attendance at = new Attendance();
             at.setStudents(st);
@@ -54,9 +55,31 @@ public class ShowAttendance extends HttpServlet {
             at.setStatus(status);
             at.setRecordTime(date);
 
-            AttendanceDBContext adb = new AttendanceDBContext();
             adb.insert(at);
         }
+        ArrayList<Attendance> list = adb.searchBySession(se.getSessionID());
+        String course = null;
+        String lec = null;
+        int slotnumber = 0;
+        Date date = null;
+        String term = null;
+        String room = null;
+        for (Attendance l : list) {
+            course = l.getSession().getCourses().getCourseID();
+            lec = l.getSession().getLecturers().getLecturersID();
+            slotnumber = l.getSession().getSlot().getSlotNumber();
+            date = l.getSession().getSlot().getTimeFrom();
+            term = l.getSession().getSlot().getTerm();
+            room = l.getSession().getRoom();
+        }
+        request.setAttribute("c", course);
+        request.setAttribute("lec", lec);
+        request.setAttribute("sn", slotnumber);
+        request.setAttribute("date", date);
+        request.setAttribute("term", term);
+        request.setAttribute("room", room);
+        
+        request.setAttribute("list", list);
         request.getRequestDispatcher("View/ShowAttendance.jsp").forward(request, response);
     }
 

@@ -65,21 +65,30 @@ SELECT se.GroupID,
  on a.StudentsID = st.StudentsID
  Where se.SessionID like '1'
 
- SELECT se.GroupID,
-     st.StudentsID,
-	 st.StudentsFirstName,
-	 st.StudentsMiddleName,
-	 st.StudentsLastName,
-	 se.LecturersID,
-	 se.CourseID,
-	 se.SlotID,
-	 se.Room,
-	 se.SlotStatus
+ SELECT st.[StudentsID],
+       st.StudentsFirstName,
+	   st.StudentsMiddleName,
+	   st.StudentsLastName,
+	   ts.TimeFrom,
+	   ts.Term,
+	   ts.SlotNumber,
+	   se.Room,
+	   se.CourseID,
+	   se.LecturersID,
+	   sg.GroupID
+      ,se.[SessionID]
+      ,at.[Commet]
+      ,at.[Status]
+      ,at.[RecordTime]
  FROM [dbo].StudentGroup sg
  JOIN [dbo].[Session] se 
  on sg.GroupID = se.GroupID
  JOIN [dbo].Students st
  on sg.StudentsID = st.StudentsID
+ JOIN [dbo].Attendance at
+ on at.SessionID = se.SessionID and at.StudentsID = st.StudentsID
+ JOIN [dbo].TimeSlot ts
+ on ts.SlotID = se.SlotID
  Where se.SessionID like '1'
 
  DBCC CHECKIDENT ('Session', RESEED, 3);
